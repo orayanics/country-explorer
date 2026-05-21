@@ -1,11 +1,7 @@
 import { computed } from "vue";
 import { useQuery } from "@pinia/colada";
 import type { IBorderCountry, ICountryDetails } from "@/types/country";
-import {
-  COUNTRIES_BASE_URL,
-  BORDER_FIELDS,
-  STALE_TIME_MS,
-} from "@/utils/constants";
+import { BASE_URL, BORDER_FIELDS, STALE_TIME_MS } from "@/utils/constants";
 import { buildNameEndpoint } from "@/utils/helpers";
 
 type TBordersState = "none" | "loading" | "error" | "empty" | "ready";
@@ -54,7 +50,7 @@ export function useDetails() {
     query: () =>
       hasBorders.value
         ? $fetch<IBorderCountry[]>(
-            `${COUNTRIES_BASE_URL}/alpha?codes=${borderCodes.value.join(",")}&fields=${BORDER_FIELDS}`,
+            `${BASE_URL}/alpha?codes=${borderCodes.value.join(",")}&fields=${BORDER_FIELDS}`,
           )
         : Promise.resolve([]),
     staleTime: STALE_TIME_MS,

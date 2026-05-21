@@ -10,6 +10,12 @@ export default defineNuxtConfig({
     },
   },
   css: ["@/assets/main.css"],
+  components: [
+    {
+      path: "@/components",
+      pathPrefix: false,
+    },
+  ],
   modules: [
     "@nuxt/eslint",
     "@nuxt/image",

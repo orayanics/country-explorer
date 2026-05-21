@@ -1,6 +1,4 @@
-<script setup>
-import AppErrorState from "~/components/states/AppErrorState.vue";
-import AppPendingState from "~/components/states/AppPendingState.vue";
+<script setup lang="ts">
 import { formatPopulation } from "~/utils/helpers";
 
 const {

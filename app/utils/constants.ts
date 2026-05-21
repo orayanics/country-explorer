@@ -8,7 +8,7 @@ export const regions = [
 
 export type TRegion = (typeof regions)[number];
 
-export const COUNTRIES_BASE_URL = "https://restcountries.com/v3.1";
+export const BASE_URL = "https://restcountries.com/v3.1";
 export const COUNTRY_FIELDS = "name,flags,population,region,capital,cca3";
 
 export const DETAILS_FIELDS =

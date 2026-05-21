@@ -3,7 +3,7 @@ import type { ICountry } from "~/types/country";
 
 const props = defineProps<{
   country: ICountry;
-  formatPopulation: (population?: number) => string;
+  formatPopulation: (population: number) => string;
 }>();
 </script>
 

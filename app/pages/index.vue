@@ -1,13 +1,35 @@
-<script setup>
-import AppEmptyState from "~/components/states/AppEmptyState.vue";
-import AppErrorState from "~/components/states/AppErrorState.vue";
-import AppPendingState from "~/components/states/AppPendingState.vue";
+<script setup lang="ts">
+import { formatPopulation } from "#imports";
+const route = useRoute();
+const router = useRouter();
 
-import { formatPopulation } from "~/utils/helpers";
+const searchQuery = computed<string>({
+  get: () => route.query.search?.toString() || "",
+  set: (value) => {
+    router.replace({
+      query: {
+        ...route.query,
+        search: value || undefined,
+      },
+    });
+  },
+});
 
-const { regionOptions, searchQuery, regionQuery, countries, pending, error } =
-  useCountries();
-
+const regionQuery = computed<TRegionOption>({
+  get: () => (route.query.region?.toString() as TRegionOption) || "All",
+  set: (value) => {
+    router.replace({
+      query: {
+        ...route.query,
+        region: value !== "All" ? value : undefined,
+      },
+    });
+  },
+});
+const { data, isLoading, error, regions } = useCountries(
+  searchQuery,
+  regionQuery,
+);
 const {
   paginatedItems: paginatedCountries,
   currentPage,
@@ -15,7 +37,7 @@ const {
   totalItems,
   pageSize,
   goToPage,
-} = usePagination(countries, { pageSize: 12 });
+} = usePagination(data, { pageSize: 12 });
 </script>
 
 <template>
@@ -32,26 +54,26 @@ const {
             type="text"
             placeholder="Search by country name"
             icon="i-lucide-search"
-            :disabled="pending"
+            :disabled="isLoading"
           />
         </UFormField>
 
         <UFormField label="Region">
           <USelect
             v-model="regionQuery"
-            :items="regionOptions"
+            :items="regions"
             icon="i-lucide-globe"
             class="w-full"
-            :disabled="pending"
+            :disabled="isLoading"
           />
         </UFormField>
       </div>
     </UCard>
 
-    <AppPendingState v-if="pending" variant="list" />
+    <AppPendingState v-if="isLoading" variant="list" />
     <AppErrorState v-else-if="error" />
     <AppEmptyState
-      v-else-if="countries.length === 0"
+      v-else-if="data.length === 0"
       message="No countries found."
     />
 
@@ -65,7 +87,7 @@ const {
     </UPageGrid>
 
     <AppPagination
-      v-if="!pending && !error && countries.length > 0"
+      v-if="!isLoading && !error && data.length > 0"
       :current-page="currentPage"
       :total-pages="totalPages"
       :total-items="totalItems"
