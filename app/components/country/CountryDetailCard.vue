@@ -1,15 +1,15 @@
 <script setup lang="ts">
-import type { ICountry, ICountryDetails } from "~/types/country";
+import type { IBorderCountry, ICountryDetails } from "~/types/country";
 import AppEmptyState from "../states/AppEmptyState.vue";
 import AppPendingState from "../states/AppPendingState.vue";
 import AppErrorState from "../states/AppErrorState.vue";
 
 const props = defineProps<{
   country: ICountryDetails;
-  borderCountries: ICountry[];
+  borderCountries: IBorderCountry[] | undefined;
   bordersState: "none" | "loading" | "error" | "empty" | "ready";
   countryFlagAlt: string;
-  formatPopulation: (population?: number) => string;
+  formatPopulation: (population: number) => string;
 }>();
 </script>
 
