@@ -26,9 +26,23 @@ const regionQuery = computed<TRegionOption>({
     });
   },
 });
+
+const favoriteQuery = computed<string>({
+  get: () => route.query.favorites?.toString() || "",
+  set: (value) => {
+    router.replace({
+      query: {
+        ...route.query,
+        favorites: value || undefined,
+      },
+    });
+  },
+});
+
 const { data, isLoading, error, regions } = useCountries(
   searchQuery,
   regionQuery,
+  favoriteQuery,
 );
 const {
   paginatedItems: paginatedCountries,
@@ -66,6 +80,18 @@ const {
             class="w-full"
             :disabled="isLoading"
           />
+        </UFormField>
+
+        <UFormField label="Favorites">
+          <!-- Toggle Button -->
+          <UButton
+            :variant="favoriteQuery ? 'solid' : 'outline'"
+            size="lg"
+            :disabled="isLoading"
+            @click="favoriteQuery = favoriteQuery ? '' : 'true'"
+          >
+            <UIcon name="i-lucide-bookmark" />
+          </UButton>
         </UFormField>
       </div>
     </UCard>

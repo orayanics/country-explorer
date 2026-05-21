@@ -1,11 +1,16 @@
 import type { ICountry } from "~/types/country";
 import { refDebounced } from "@vueuse/core";
+import { useFavoritesStore } from "~/stores/favorites";
 
 export type TRegionOption = "All" | TRegion;
 export const regionOptions: TRegionOption[] = ["All", ...regions];
 const DEBOUNCE_DELAY_MS = 600;
 
-export const useCountries = (query: Ref<string>, region: Ref<string>) => {
+export const useCountries = (
+  query: Ref<string>,
+  region: Ref<string>,
+  favorite: Ref<string>,
+) => {
   const debouncedQuery = refDebounced(query, DEBOUNCE_DELAY_MS);
 
   const url = computed(() => {
@@ -28,6 +33,15 @@ export const useCountries = (query: Ref<string>, region: Ref<string>) => {
   const countries = computed<ICountry[]>(() => {
     const list = data.value ?? [];
     const regionValue = region.value;
+    const favoriteValue = favorite.value === "true";
+
+    if (favoriteValue) {
+      const favoritesStore = useFavoritesStore();
+      return list.filter((country) =>
+        favoritesStore.isFavorite(country.name.common),
+      );
+    }
+
     return regionValue === "All"
       ? list
       : list.filter((country) => country.region === regionValue);

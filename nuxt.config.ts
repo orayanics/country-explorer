@@ -23,4 +23,7 @@ export default defineNuxtConfig({
     "@pinia/nuxt",
     "@pinia/colada-nuxt",
   ],
+  pinia: {
+    storesDirs: ["@/stores/**"],
+  },
 });

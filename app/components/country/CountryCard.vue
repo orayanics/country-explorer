@@ -1,14 +1,17 @@
 <script setup lang="ts">
 import type { ICountry } from "~/types/country";
+import { useFavoritesStore } from "@/stores/favorites";
 
 const props = defineProps<{
   country: ICountry;
   formatPopulation: (population: number) => string;
 }>();
+
+const { addFavorite, removeFavorite, isFavorite } = useFavoritesStore();
 </script>
 
 <template>
-  <UCard>
+  <UCard class="relative">
     <NuxtLink
       :to="`/country/${encodeURIComponent(props.country.name?.common)}`"
     >
@@ -48,5 +51,20 @@ const props = defineProps<{
         </div>
       </div>
     </NuxtLink>
+
+    <div>
+      <UButton
+        :variant="isFavorite(props.country.name.common) ? 'solid' : 'outline'"
+        size="lg"
+        class="z-10 absolute top-0 right-0 m-2"
+        @click="
+          isFavorite(props.country.name.common)
+            ? removeFavorite(props.country.name.common)
+            : addFavorite(props.country.name.common)
+        "
+      >
+        <UIcon name="i-lucide-bookmark" />
+      </UButton>
+    </div>
   </UCard>
 </template>
