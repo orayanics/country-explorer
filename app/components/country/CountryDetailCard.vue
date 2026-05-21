@@ -5,7 +5,7 @@ import AppPendingState from "../states/AppPendingState.vue";
 import AppErrorState from "../states/AppErrorState.vue";
 
 const props = defineProps<{
-  country: ICountryDetails;
+  country: ICountryDetails | undefined;
   borderCountries: IBorderCountry[] | undefined;
   bordersState: "none" | "loading" | "error" | "empty" | "ready";
   countryFlagAlt: string;
@@ -17,30 +17,32 @@ const props = defineProps<{
   <UCard>
     <div class="content-stack">
       <NuxtImg
-        :src="props.country.flags?.png"
+        :src="props.country?.flags?.png"
         :alt="props.countryFlagAlt"
         width="160"
         height="100"
       />
       <h1 class="title-row">
         <UIcon name="i-lucide-flag" class="size-5" />
-        <span>{{ props.country.name?.common || "N/A" }}</span>
+        <span>{{ props.country?.name?.common || "N/A" }}</span>
       </h1>
       <p class="meta-row">
         <UIcon name="i-lucide-users" class="size-4" />
-        <span>{{ props.formatPopulation(props.country.population) }}</span>
+        <span>{{
+          props.formatPopulation(props.country?.population || 0)
+        }}</span>
       </p>
       <p class="meta-row">
         <UIcon name="i-lucide-globe" class="size-4" />
-        <span>{{ props.country.region || "N/A" }}</span>
+        <span>{{ props.country?.region || "N/A" }}</span>
       </p>
-      <p v-if="props.country.subregion" class="meta-row">
+      <p v-if="props.country?.subregion" class="meta-row">
         <UIcon name="i-lucide-map" class="size-4" />
-        <span>{{ props.country.subregion }}</span>
+        <span>{{ props.country?.subregion }}</span>
       </p>
       <p class="meta-row">
         <UIcon name="i-lucide-building-2" class="size-4" />
-        <span>{{ props.country.capital?.[0] || "N/A" }}</span>
+        <span>{{ props.country?.capital?.[0] || "N/A" }}</span>
       </p>
     </div>
 

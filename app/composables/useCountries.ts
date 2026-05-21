@@ -17,7 +17,11 @@ export const useCountries = (query: Ref<string>, region: Ref<string>) => {
 
   const { data, isLoading, error } = useQuery({
     key: () => ["countries", debouncedQuery.value.trim(), region.value],
-    query: () => $fetch<ICountry[]>(url.value),
+    query: () =>
+      $fetch<ICountry[]>(url.value).catch((err) => {
+        if (err?.statusCode === 404) return [];
+        throw err;
+      }),
     staleTime: STALE_TIME_MS,
   });
 

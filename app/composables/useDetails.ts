@@ -20,7 +20,10 @@ export function useDetails() {
     query: () =>
       $fetch<ICountryDetails[]>(
         `${BASE_URL}/name/${encodeURIComponent(name.value)}?fields=${DETAILS_FIELDS}`,
-      ),
+      ).catch((err) => {
+        if (err?.statusCode === 404) return [];
+        throw err;
+      }),
     staleTime: STALE_TIME_MS,
   });
 
@@ -71,6 +74,7 @@ export function useDetails() {
     bordersState,
     pending,
     error,
+    bordersError,
     countryFlagAlt,
   };
 }

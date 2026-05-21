@@ -5,6 +5,7 @@ const {
   country,
   borderCountries,
   bordersState,
+  bordersError,
   pending,
   error,
   countryFlagAlt,
@@ -21,10 +22,12 @@ const {
     />
 
     <AppPendingState v-if="pending" variant="detail" />
-    <AppErrorState v-else-if="error" />
-
+    <AppEmptyState
+      v-else-if="error || bordersError"
+      message="Country not found."
+    />
     <CountryDetailCard
-      v-else-if="country"
+      v-else
       :country="country"
       :border-countries="borderCountries"
       :borders-state="bordersState"
