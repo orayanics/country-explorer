@@ -17,6 +17,7 @@ const props = defineProps<{
   <UCard>
     <div class="content-stack">
       <NuxtImg
+        v-if="props.country?.flags.png"
         :src="props.country?.flags?.png"
         :alt="props.countryFlagAlt"
         width="160"
